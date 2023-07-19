@@ -28,6 +28,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.IndoorBuilding;
+import com.google.android.gms.maps.model.IndoorLevel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -441,6 +443,32 @@ final class GoogleMapController
           result.success(googleMap.getCameraPosition().zoom);
           break;
         }
+      case "map#getActiveLevelName":
+        {
+          IndoorBuilding building = googleMap.getFocusedBuilding();
+          if(building != null) {
+            int index = building.getActiveLevelIndex();
+            if(index >= 0) {
+              result.success(building.getLevels().get(index).getName());
+              break;
+            }
+          }
+          result.success(null);
+          break;
+        }
+      case "map#getActiveLevelShortName":
+        {
+          IndoorBuilding building = googleMap.getFocusedBuilding();
+          if(building != null) {
+            int index = building.getActiveLevelIndex();
+            if(index >= 0) {
+              result.success(building.getLevels().get(index).getShortName());
+              break;
+            }
+          }
+          result.success(null);
+          break;
+        }
       case "map#setStyle":
         {
           invalidateMapIfNeeded();
@@ -602,6 +630,7 @@ final class GoogleMapController
     googleMap.setOnCircleClickListener(listener);
     googleMap.setOnMapClickListener(listener);
     googleMap.setOnMapLongClickListener(listener);
+    googleMap.setOnIndoorStateChangeListener(listener);
   }
 
   // @Override
@@ -926,5 +955,15 @@ final class GoogleMapController
 
   public void setBuildingsEnabled(boolean buildingsEnabled) {
     this.buildingsEnabled = buildingsEnabled;
+  }
+
+  @Override
+  public void onIndoorBuildingFocused() {
+    methodChannel.invokeMethod("map#onIndoorBuildingFocused", Collections.singletonMap("map", id));
+  }
+
+  @Override
+  public void onIndoorLevelActivated(@NonNull IndoorBuilding indoorBuilding) {
+    methodChannel.invokeMethod("map#onIndoorLevelActivated", Collections.singletonMap("map", id));
   }
 }

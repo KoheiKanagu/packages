@@ -123,6 +123,8 @@ class GoogleMap extends StatefulWidget {
     this.onCameraIdle,
     this.onTap,
     this.onLongPress,
+    this.onIndoorBuildingFocused,
+    this.onIndoorLevelActivated,
   });
 
   /// Callback method for when the map is ready to be used.
@@ -223,6 +225,10 @@ class GoogleMap extends StatefulWidget {
 
   /// Called every time a [GoogleMap] is long pressed.
   final ArgumentCallback<LatLng>? onLongPress;
+
+  final VoidCallback? onIndoorBuildingFocused;
+
+  final VoidCallback? onIndoorLevelActivated;
 
   /// True if a "My Location" layer should be shown on the map.
   ///

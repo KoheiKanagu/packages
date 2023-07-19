@@ -167,3 +167,11 @@ class MapLongPressEvent extends _PositionedMapEvent<void> {
   /// The `position` of this event is the LatLng where the Map was long pressed.
   MapLongPressEvent(int mapId, LatLng position) : super(mapId, position, null);
 }
+
+class IndoorBuildingFocusedEvent extends MapEvent<void> {
+  IndoorBuildingFocusedEvent(int mapId) : super(mapId, null);
+}
+
+class IndoorLevelActivated extends MapEvent<void> {
+  IndoorLevelActivated(int mapId) : super(mapId, null);
+}
