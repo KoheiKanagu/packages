@@ -166,6 +166,20 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
     return _events(mapId).whereType<MapLongPressEvent>();
   }
 
+  @override
+  Stream<IndoorBuildingFocusedEvent> onIndoorBuildingFocused({
+    required int mapId,
+  }) {
+    return _events(mapId).whereType<IndoorBuildingFocusedEvent>();
+  }
+
+  @override
+  Stream<IndoorLevelActivated> onIndoorLevelActivated({
+    required int mapId,
+  }) {
+    return _events(mapId).whereType<IndoorLevelActivated>();
+  }
+
   Future<dynamic> _handleMethodCall(MethodCall call, int mapId) async {
     switch (call.method) {
       case 'camera#onMoveStarted':
@@ -253,6 +267,12 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
           mapId,
           LatLng.fromJson(arguments['position'])!,
         ));
+        break;
+      case 'map#onIndoorBuildingFocused':
+        _mapEventStreamController.add(IndoorBuildingFocusedEvent(mapId));
+        break;
+      case 'map#onIndoorLevelActivated':
+        _mapEventStreamController.add(IndoorLevelActivated(mapId));
         break;
       case 'tileOverlay#getTile':
         final Map<String, Object?> arguments = _getArgumentDictionary(call);
@@ -471,6 +491,20 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
     required int mapId,
   }) async {
     return (await channel(mapId).invokeMethod<double>('map#getZoomLevel'))!;
+  }
+
+  @override
+  Future<String?> getActiveLevelName({
+    required int mapId,
+  }) async {
+    return channel(mapId).invokeMethod<String>('map#getActiveLevelName');
+  }
+
+  @override
+  Future<String?> getActiveLevelShortName({
+    required int mapId,
+  }) async {
+    return channel(mapId).invokeMethod<String>('map#getActiveLevelShortName');
   }
 
   @override

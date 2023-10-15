@@ -79,6 +79,16 @@ class GoogleMapController {
         .listen((MapTapEvent e) => _googleMapState.onTap(e.position));
     GoogleMapsFlutterPlatform.instance.onLongPress(mapId: mapId).listen(
         (MapLongPressEvent e) => _googleMapState.onLongPress(e.position));
+    if (_googleMapState.widget.onIndoorBuildingFocused != null) {
+      GoogleMapsFlutterPlatform.instance
+          .onIndoorBuildingFocused(mapId: mapId)
+          .listen((_) => _googleMapState.widget.onIndoorBuildingFocused!());
+    }
+    if (_googleMapState.widget.onIndoorLevelActivated != null) {
+      GoogleMapsFlutterPlatform.instance
+          .onIndoorLevelActivated(mapId: mapId)
+          .listen((_) => _googleMapState.widget.onIndoorLevelActivated!());
+    }
   }
 
   /// Updates configuration options of the map user interface.
@@ -261,6 +271,15 @@ class GoogleMapController {
   /// Returns the current zoom level of the map
   Future<double> getZoomLevel() {
     return GoogleMapsFlutterPlatform.instance.getZoomLevel(mapId: mapId);
+  }
+
+  Future<String?> getActiveLevelName() {
+    return GoogleMapsFlutterPlatform.instance.getActiveLevelName(mapId: mapId);
+  }
+
+  Future<String?> getActiveLevelShortName() {
+    return GoogleMapsFlutterPlatform.instance
+        .getActiveLevelShortName(mapId: mapId);
   }
 
   /// Returns the image bytes of the map

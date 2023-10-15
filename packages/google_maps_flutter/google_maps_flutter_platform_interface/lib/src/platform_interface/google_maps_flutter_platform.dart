@@ -280,6 +280,33 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('getZoomLevel() has not been implemented.');
   }
 
+  Future<String?> getActiveLevelName({
+    required int mapId,
+  }) {
+    throw UnimplementedError('getActiveLevelName() has not been implemented.');
+  }
+
+  Future<String?> getActiveLevelShortName({
+    required int mapId,
+  }) {
+    throw UnimplementedError(
+        'getActiveLevelShortName() has not been implemented.');
+  }
+
+  Stream<IndoorBuildingFocusedEvent> onIndoorBuildingFocused({
+    required int mapId,
+  }) {
+    throw UnimplementedError(
+        'onIndoorBuildingFocused() has not been implemented.');
+  }
+
+  Stream<IndoorLevelActivated> onIndoorLevelActivated({
+    required int mapId,
+  }) {
+    throw UnimplementedError(
+        'onIndoorLevelActivated() has not been implemented.');
+  }
+
   /// Returns the image bytes of the map.
   ///
   /// Returns null if a snapshot cannot be created.

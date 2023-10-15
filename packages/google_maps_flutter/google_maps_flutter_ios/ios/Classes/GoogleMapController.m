@@ -120,6 +120,7 @@
       }
     }];
     _mapView.delegate = weakSelf;
+    _mapView.indoorDisplay.delegate = weakSelf;
     _mapView.paddingAdjustmentBehavior = kGMSMapViewPaddingAdjustmentBehaviorNever;
     _registrar = registrar;
     _markersController = [[FLTMarkersController alloc] initWithMethodChannel:_channel
@@ -369,6 +370,10 @@
     result(zoomLevels);
   } else if ([call.method isEqualToString:@"map#getZoomLevel"]) {
     result(@(self.mapView.camera.zoom));
+  } else if ([call.method isEqualToString:@"map#getActiveLevelName"]) {
+    result(self.mapView.indoorDisplay.activeLevel.name);
+  } else if ([call.method isEqualToString:@"map#getActiveLevelShortName"]) {
+    result(self.mapView.indoorDisplay.activeLevel.shortName);
   } else if ([call.method isEqualToString:@"map#isZoomGesturesEnabled"]) {
     NSNumber *isZoomGesturesEnabled = @(self.mapView.settings.zoomGestures);
     result(isZoomGesturesEnabled);
@@ -512,6 +517,16 @@
     self.mapView.mapStyle = style;
     return nil;
   }
+}
+
+#pragma mark - GMSIndoorDisplayDelegate methods
+
+- (void)didChangeActiveBuilding:(GMSIndoorBuilding *)building {
+    [self.channel invokeMethod:@"map#onIndoorBuildingFocused" arguments:@{}];
+}
+
+- (void)didChangeActiveLevel:(GMSIndoorLevel *)level {
+    [self.channel invokeMethod:@"map#onIndoorLevelActivated" arguments:@{}];
 }
 
 #pragma mark - GMSMapViewDelegate methods
